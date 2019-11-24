@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     
     var currentValue: Int = 50
     var targetValue: Int = 0
+    var diff: Int = 0
     
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var targetLabel: UILabel!
@@ -26,7 +27,8 @@ class ViewController: UIViewController {
 
     @IBAction func showAlert() {
         let message: String = "Move to \(currentValue)" +
-        "\n The target value is \(targetLabel.text!)"
+        "\n The target value is \(targetLabel.text!)" +
+        "\n Difference is \(diff)"
         
         let alert = UIAlertController(title: "Slider", message: message, preferredStyle: .alert)
         
@@ -40,6 +42,7 @@ class ViewController: UIViewController {
         let roundedValue = slider.value.rounded()
         print("Current value is \(roundedValue)")
         currentValue = Int(roundedValue)
+        diff = calculateDifference()
     }
     
     func startNewRound() {
@@ -51,6 +54,21 @@ class ViewController: UIViewController {
     
     func updateLabel() {
         targetLabel.text = String(targetValue)
+    }
+    
+    func calculateDifference() -> Int {
+//        var diff: Int
+//        if currentValue > targetValue {
+//            diff = currentValue - targetValue
+//        } else {
+//            diff = targetValue - currentValue
+//        }
+        var diff = currentValue - targetValue
+        if(diff < 0) {
+            diff *= -1
+        }
+        
+        return diff
     }
 }
 
