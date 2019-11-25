@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     var targetValue = 0
     var gainedScore = 0
     var score = 0
+    var bonus = 0
     var round = 1
     
     @IBOutlet weak var slider: UISlider!
@@ -31,7 +32,7 @@ class ViewController: UIViewController {
         self.updateScore()
         self.updateRoute()
         
-        let message: String = "You gained \(gainedScore) points"
+        let message: String = "You gained \(gainedScore + bonus) points"
         let title: String = self.getAlertTitle()
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -65,6 +66,7 @@ class ViewController: UIViewController {
     func startNewRound() {
         targetValue = Int.random(in: 1...100)
         currentValue = 50
+        bonus = 0
         slider.value = Float(currentValue)
         
         updateLabels()
@@ -78,8 +80,21 @@ class ViewController: UIViewController {
     
     func updateScore() {
         let diff = abs(currentValue - targetValue)
+        
+        if diff == 0 {
+            bonus = 100
+        } else if diff == 1 {
+            bonus = 50
+        } else {
+            bonus = 0
+        }
+        
         gainedScore = 100 - diff
+        
         score += gainedScore
+        if bonus > 0 {
+            score += bonus
+        }
     }
     
     func updateRoute() {
