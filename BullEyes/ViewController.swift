@@ -7,68 +7,58 @@
 //
 
 import UIKit
+import Foundation
 
 class ViewController: UIViewController {
     
-    var currentValue: Int = 50
-    var targetValue: Int = 0
-    var diff: Int = 0
+    var currentValue = 50
+    var targetValue = 0
+    var gainedScore = 0
+    var score = 0
     
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var targetLabel: UILabel!
+    @IBOutlet var scoreLabel: UILabel!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let roundedValue = slider.value.rounded()
-        currentValue = Int(roundedValue)
-        
         self.startNewRound()
     }
 
     @IBAction func showAlert() {
-        let message: String = "Move to \(currentValue)" +
-        "\n The target value is \(targetLabel.text!)" +
-        "\n Difference is \(diff)"
+        self.updateScore()
         
-        let alert = UIAlertController(title: "Slider", message: message, preferredStyle: .alert)
-        
+        let message: String = "You gained \(gainedScore) points"
+        let alert = UIAlertController(title: "Congrats!", message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+        
         self.startNewRound()
     }
     
     @IBAction func moveSlider(_ slider: UISlider) {
         let roundedValue = slider.value.rounded()
-        print("Current value is \(roundedValue)")
         currentValue = Int(roundedValue)
-        diff = calculateDifference()
+        print("Set current value to \(currentValue)")
     }
     
     func startNewRound() {
         targetValue = Int.random(in: 1...100)
         currentValue = 50
         slider.value = Float(currentValue)
-        updateLabel()
+        updateLabels()
     }
     
-    func updateLabel() {
+    func updateLabels() {
         targetLabel.text = String(targetValue)
+        scoreLabel.text = String(score)
     }
     
-    func calculateDifference() -> Int {
-//        var diff: Int
-//        if currentValue > targetValue {
-//            diff = currentValue - targetValue
-//        } else {
-//            diff = targetValue - currentValue
-//        }
-        var diff = currentValue - targetValue
-        if(diff < 0) {
-            diff *= -1
-        }
-        
-        return diff
+    func updateScore() {
+        let diff = abs(currentValue - targetValue)
+        gainedScore = 100 - diff
+        score += gainedScore
     }
 }
 
