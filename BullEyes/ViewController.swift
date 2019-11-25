@@ -36,16 +36,24 @@ class ViewController: UIViewController {
         let title: String = self.getAlertTitle()
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        let action = UIAlertAction(title: "OK", style: .default, handler: {
+            action in
+            self.startNewRound()
+        })
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-        
-        self.startNewRound()
     }
     
     @IBAction func moveSlider(_ slider: UISlider) {
         let roundedValue = slider.value.rounded()
         currentValue = Int(roundedValue)
+    }
+    
+    @IBAction func startOver() {
+        score = 0
+        gainedScore = 0
+        round = 1
+        startNewRound()
     }
     
     func getAlertTitle() -> String {
